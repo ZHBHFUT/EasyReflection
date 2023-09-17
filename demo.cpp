@@ -32,9 +32,9 @@ int main()
 
     // 1) for aggregate type
     Foo foo{};
-    constexpr auto nfield_Foo = Reflection<Foo>::nfield; //--> 3
-    using field_types_Foo     = Reflection<Foo>::field_types; //--> Types<int,char,float>
-    auto& field_offsets_Foo   = Reflection<Foo>::field_offsets; //--> std::array<size_t,3>{0,4,8}
+    constexpr auto nfield_Foo = member_count<Foo>; //--> 3
+    using field_types_Foo     = member_types<Foo>; //--> Types<int,char,float>
+    auto&& field_offsets_Foo  = member_offsets<Foo>(); //--> std::array<size_t,3>{0,4,8}
     using type_Foo_a1         = member_type<Foo, 0>; //--> char
     member_of<Foo, 2>(foo) = 1; //--> foo={0,0,1}, i.e. foo.a2=1
 
@@ -48,10 +48,10 @@ int main()
 
     // 2) for non-aggregated type
     Bar bar{};
-    constexpr auto nfield_Bar = Reflection<Bar>::nfield; // = member_count<Foo>;
-    using field_types_Bar     = Reflection<Bar>::field_types; // = member_types<Foo>;
-    auto& field_offsets_Bar   = Reflection<Bar>::field_offsets; //--> std::array<size_t,3>{0,4,8}
-    using type_Bar_a1         = typename TypeOf<2, field_types_Bar>::type; //--> float
+    constexpr auto nfield_Bar = member_count<Bar>; //--> 3
+    using field_types_Bar     = member_types<Bar>; //--> Types<int,char,float>
+    auto&& field_offsets_Bar  = member_offsets<Bar>(); //--> std::array<size_t,3>{0,4,8}
+    using type_Bar_a1         = member_type<Bar,2>; //--> float
     member_of<Bar, 2>(bar) = 1; //--> bar={0,0,1}, i.e. bar.a2=1
 
     static_assert(nfield_Bar == 3);

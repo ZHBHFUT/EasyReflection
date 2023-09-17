@@ -602,7 +602,7 @@ namespace EasyLib {
 
     //! @brief Get member type list.
     //! @tparam Class  The class/struct type.
-    template<typename Class, size_t I>
+    template<typename Class>
     using member_types = typename Reflection<Class>::field_types;
 
     //! @brief Get type of the i-th member.
