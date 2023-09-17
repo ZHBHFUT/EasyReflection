@@ -85,7 +85,7 @@
 *     struct Foo{int a1; char a2; float a3;};
 *     using types = std::tuple<FOR_EACH_TM(MemberOffset,Foo,a1,a2,a3)void>; // add void at last because the comma.
 *     // --> std::tuple<int,char,float,void>
-*     const auto offsets = std::array<size_t, 3>{FOR_EACH_TM(MemberOffset,Foo,a1,a2,a3)};
+*     const auto offsets = std::array<std::size_t, 3>{FOR_EACH_TM(MemberOffset,Foo,a1,a2,a3)};
 *     // --> {0,4,8}
 *
 * NOTE: This macro can't work if not use the /Zc:preprocessor compiler switch for MSVC.
@@ -111,16 +111,16 @@ namespace EasyLib {
     template<typename T> struct Type
     {
         using type = T;
-        inline static constexpr size_t size_bytes = sizeof(T);
+        inline static constexpr std::size_t size_bytes = sizeof(T);
     };
 
     template<typename ... TS> struct Types
     {
-        inline static constexpr size_t size = sizeof...(TS);
+        inline static constexpr std::size_t size = sizeof...(TS);
     };
 
-    template<size_t I, typename List> struct TypeOf;
-    template<size_t I, typename Head, typename ... Tails>
+    template<std::size_t I, typename List> struct TypeOf;
+    template<std::size_t I, typename Head, typename ... Tails>
     struct TypeOf<I, Types<Head, Tails...> >
     {
         using type = typename TypeOf<I - 1, Types<Tails...>>::type;
@@ -212,261 +212,261 @@ namespace EasyLib {
         template<Aggregate T>
         inline auto field_offsets_()
         {
-            constexpr size_t nf = num_fields_<T>();
-            using array = std::array<size_t, nf>;
+            constexpr std::size_t nf = num_fields_<T>();
+            using array = std::array<std::size_t, nf>;
             if      constexpr (nf == 0)return array{};
             else if constexpr (nf == 1)return array{ 0 };
             else if constexpr (nf == 2) {
                 auto& [m1, m2] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2 };
             }
             else if constexpr (nf == 3) {
                 auto& [m1, m2, m3] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3 };
             }
             else if constexpr (nf == 4) {
                 auto& [m1, m2, m3, m4] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4 };
             }
             else if constexpr (nf == 5) {
                 auto& [m1, m2, m3, m4, m5] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5 };
             }
             else if constexpr (nf == 6) {
                 auto& [m1, m2, m3, m4, m5, m6] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6 };
             }
             else if constexpr (nf == 7) {
                 auto& [m1, m2, m3, m4, m5, m6, m7] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7 };
             }
             else if constexpr (nf == 8) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8 };
             }
             else if constexpr (nf == 9) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9 };
             }
             else if constexpr (nf == 10) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10 };
             }
             else if constexpr (nf == 11) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11 };
             }
             else if constexpr (nf == 12) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12 };
             }
             else if constexpr (nf == 13) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13 };
             }
             else if constexpr (nf == 14) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14 };
             }
             else if constexpr (nf == 15) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15 };
             }
             else if constexpr (nf == 16) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16 };
             }
             else if constexpr (nf == 17) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17 };
             }
             else if constexpr (nf == 18) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18 };
             }
             else if constexpr (nf == 19) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19 };
             }
             else if constexpr (nf == 20) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20 };
             }
             else if constexpr (nf == 21) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21 };
             }
             else if constexpr (nf == 22) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22 };
             }
             else if constexpr (nf == 23) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23 };
             }
             else if constexpr (nf == 24) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24 };
             }
             else if constexpr (nf == 25) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25 };
             }
             else if constexpr (nf == 26) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26 };
             }
             else if constexpr (nf == 27) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27 };
             }
             else if constexpr (nf == 28) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28 };
             }
             else if constexpr (nf == 29) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29 };
             }
             else if constexpr (nf == 30) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30 };
             }
             else if constexpr (nf == 31) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31 };
             }
             else if constexpr (nf == 32) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32 };
             }
             else if constexpr (nf == 33) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33 };
             }
             else if constexpr (nf == 34) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34 };
             }
             else if constexpr (nf == 35) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35 };
             }
             else if constexpr (nf == 36) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36 };
             }
             else if constexpr (nf == 37) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37 };
             }
             else if constexpr (nf == 38) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38 };
             }
             else if constexpr (nf == 39) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39 };
             }
             else if constexpr (nf == 40) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40 };
             }
             else if constexpr (nf == 41) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41 };
             }
             else if constexpr (nf == 42) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42 };
             }
             else if constexpr (nf == 43) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43 };
             }
             else if constexpr (nf == 44) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44 };
             }
             else if constexpr (nf == 45) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45 };
             }
             else if constexpr (nf == 46) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46 };
             }
             else if constexpr (nf == 47) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47 };
             }
             else if constexpr (nf == 48) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48 };
             }
             else if constexpr (nf == 49) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49 };
             }
             else if constexpr (nf == 50) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50 };
             }
             else if constexpr (nf == 51) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51 };
             }
             else if constexpr (nf == 52) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52 };
             }
             else if constexpr (nf == 53) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53 };
             }
             else if constexpr (nf == 54) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54 };
             }
             else if constexpr (nf == 55) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55 };
             }
             else if constexpr (nf == 56) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56 };
             }
             else if constexpr (nf == 57) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57 };
             }
             else if constexpr (nf == 58) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58 };
             }
             else if constexpr (nf == 59) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59 };
             }
             else if constexpr (nf == 60) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59, m60] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59, (size_t)&m60 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59, (std::size_t)&m60 };
             }
             else if constexpr (nf == 61) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59, m60, m61] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59, (size_t)&m60, (size_t)&m61 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59, (std::size_t)&m60, (std::size_t)&m61 };
             }
             else if constexpr (nf == 62) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59, m60, m61, m62] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59, (size_t)&m60, (size_t)&m61, (size_t)&m62 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59, (std::size_t)&m60, (std::size_t)&m61, (std::size_t)&m62 };
             }
             else if constexpr (nf == 63) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59, m60, m61, m62, m63] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59, (size_t)&m60, (size_t)&m61, (size_t)&m62, (size_t)&m63 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59, (std::size_t)&m60, (std::size_t)&m61, (std::size_t)&m62, (std::size_t)&m63 };
             }
             else if constexpr (nf == 64) {
                 auto& [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, m41, m42, m43, m44, m45, m46, m47, m48, m49, m50, m51, m52, m53, m54, m55, m56, m57, m58, m59, m60, m61, m62, m63, m64] = *((T*)nullptr);
-                return array{ (size_t)&m1, (size_t)&m2, (size_t)&m3, (size_t)&m4, (size_t)&m5, (size_t)&m6, (size_t)&m7, (size_t)&m8, (size_t)&m9, (size_t)&m10, (size_t)&m11, (size_t)&m12, (size_t)&m13, (size_t)&m14, (size_t)&m15, (size_t)&m16, (size_t)&m17, (size_t)&m18, (size_t)&m19, (size_t)&m20, (size_t)&m21, (size_t)&m22, (size_t)&m23, (size_t)&m24, (size_t)&m25, (size_t)&m26, (size_t)&m27, (size_t)&m28, (size_t)&m29, (size_t)&m30, (size_t)&m31, (size_t)&m32, (size_t)&m33, (size_t)&m34, (size_t)&m35, (size_t)&m36, (size_t)&m37, (size_t)&m38, (size_t)&m39, (size_t)&m40, (size_t)&m41, (size_t)&m42, (size_t)&m43, (size_t)&m44, (size_t)&m45, (size_t)&m46, (size_t)&m47, (size_t)&m48, (size_t)&m49, (size_t)&m50, (size_t)&m51, (size_t)&m52, (size_t)&m53, (size_t)&m54, (size_t)&m55, (size_t)&m56, (size_t)&m57, (size_t)&m58, (size_t)&m59, (size_t)&m60, (size_t)&m61, (size_t)&m62, (size_t)&m63, (size_t)&m64 };
+                return array{ (std::size_t)&m1, (std::size_t)&m2, (std::size_t)&m3, (std::size_t)&m4, (std::size_t)&m5, (std::size_t)&m6, (std::size_t)&m7, (std::size_t)&m8, (std::size_t)&m9, (std::size_t)&m10, (std::size_t)&m11, (std::size_t)&m12, (std::size_t)&m13, (std::size_t)&m14, (std::size_t)&m15, (std::size_t)&m16, (std::size_t)&m17, (std::size_t)&m18, (std::size_t)&m19, (std::size_t)&m20, (std::size_t)&m21, (std::size_t)&m22, (std::size_t)&m23, (std::size_t)&m24, (std::size_t)&m25, (std::size_t)&m26, (std::size_t)&m27, (std::size_t)&m28, (std::size_t)&m29, (std::size_t)&m30, (std::size_t)&m31, (std::size_t)&m32, (std::size_t)&m33, (std::size_t)&m34, (std::size_t)&m35, (std::size_t)&m36, (std::size_t)&m37, (std::size_t)&m38, (std::size_t)&m39, (std::size_t)&m40, (std::size_t)&m41, (std::size_t)&m42, (std::size_t)&m43, (std::size_t)&m44, (std::size_t)&m45, (std::size_t)&m46, (std::size_t)&m47, (std::size_t)&m48, (std::size_t)&m49, (std::size_t)&m50, (std::size_t)&m51, (std::size_t)&m52, (std::size_t)&m53, (std::size_t)&m54, (std::size_t)&m55, (std::size_t)&m56, (std::size_t)&m57, (std::size_t)&m58, (std::size_t)&m59, (std::size_t)&m60, (std::size_t)&m61, (std::size_t)&m62, (std::size_t)&m63, (std::size_t)&m64 };
             }
         }
 
@@ -474,7 +474,7 @@ namespace EasyLib {
         template<Aggregate T>
         inline auto field_types_()
         {
-            constexpr size_t nf = num_fields_<T>();
+            constexpr std::size_t nf = num_fields_<T>();
             if      constexpr (nf == 0)return Types<>{};
             else if constexpr (nf == 1) { auto [m1] = *((T*)nullptr); return Types<decltype(m1)>{}; }
             else if constexpr (nf == 2) { auto [m1, m2] = *((T*)nullptr); return Types<decltype(m1), decltype(m2)>{}; }
@@ -546,9 +546,9 @@ namespace EasyLib {
     template<Aggregate T>
     struct Reflection<T>
     {
-        inline static constexpr size_t size_bytes = sizeof(T);
-        inline static constexpr size_t nfield = detail::num_fields_<T>();
-        inline static const std::array<size_t, nfield> field_offsets{ detail::field_offsets_<T>() };
+        inline static constexpr std::size_t size_bytes = sizeof(T);
+        inline static constexpr std::size_t nfield = detail::num_fields_<T>();
+        inline static const std::array<std::size_t, nfield> field_offsets{ detail::field_offsets_<T>() };
         using field_types = typename decltype(detail::field_types_<T>());
     };
 
@@ -556,11 +556,11 @@ namespace EasyLib {
     template<typename auto T::*m>\
     struct _MemberStealer_ ##T##m\
     {\
-        friend size_t _get_offset_ ##T##m(){return (size_t)&(((T*)nullptr)->*m);}\
+        friend std::size_t _get_offset_ ##T##m(){return (std::size_t)&(((T*)nullptr)->*m);}\
         friend auto _get_type_ ##T##m(){return EasyLib::Type<std::remove_reference_t<decltype(((T*)nullptr)->*m)> >{};}\
     };\
     template struct _MemberStealer_ ##T##m<&T::m>;\
-    size_t _get_offset_ ##T##m(); /*redeclare in global ns*/ \
+    std::size_t _get_offset_ ##T##m(); /*redeclare in global ns*/ \
     auto _get_type_ ##T##m(); /*redeclare in global ns*/ 
 
 #define _GET_OFFSET(T,m) _get_offset_ ##T##m(),
@@ -589,16 +589,16 @@ namespace EasyLib {
     template<> struct EasyLib::Reflection<T>\
     {\
         static_assert(std::is_class_v<T> && !std::is_aggregate_v<T>, "***ERROR*** type is aggregate!!!");\
-        inline static constexpr size_t size_bytes = sizeof(T);\
-        inline static constexpr size_t nfield = PP_NARG(__VA_ARGS__) + 1;\
-        inline static const std::array<size_t, nfield> field_offsets{FOR_EACH_TM(_GET_OFFSET,T,m1,__VA_ARGS__)};\
+        inline static constexpr std::size_t size_bytes = sizeof(T);\
+        inline static constexpr std::size_t nfield = PP_NARG(__VA_ARGS__) + 1;\
+        inline static const std::array<std::size_t, nfield> field_offsets{FOR_EACH_TM(_GET_OFFSET,T,m1,__VA_ARGS__)};\
         using field_types = EasyLib::Popback<EasyLib::Types<FOR_EACH_TM(_GET_TYPE,T,m1,__VA_ARGS__) void>>::type;\
     };
 
     //! @brief Get member count.
     //! @tparam Class  The class/struct type.
     template<typename Class>
-    inline constexpr size_t member_count = Reflection<Class>::nfield;
+    inline constexpr std::size_t member_count = Reflection<Class>::nfield;
 
     //! @brief Get member type list.
     //! @tparam Class  The class/struct type.
@@ -608,7 +608,7 @@ namespace EasyLib {
     //! @brief Get type of the i-th member.
     //! @tparam Class  The class/struct type.
     //! @tparam I      The member index, >=0
-    template<typename Class, size_t I>
+    template<typename Class, std::size_t I>
     using member_type = TypeOf<I, typename Reflection<Class>::field_types>::type;
 
     //! @brief Get member offsets array.
@@ -619,15 +619,15 @@ namespace EasyLib {
     //! @brief Get offset in bytes of the i-th member.
     //! @tparam Class  The class/struct type.
     //! @tparam I      The member index, >=0
-    template<typename Class, size_t I>
-    inline size_t member_offset() { return std::get<I>(Reflection<Class>::field_offsets); }
+    template<typename Class, std::size_t I>
+    inline std::size_t member_offset() { return std::get<I>(Reflection<Class>::field_offsets); }
 
     //! @brief Get reference of class member variable even if it is private or protect.
     //! @tparam Class  The class/struct type.
     //! @tparam I      The member index, >=0
     //! @param obj     Instance of type.
     //! @return Reference of the I-th member variable of \obj.
-    template<typename Class, size_t I>
+    template<typename Class, std::size_t I>
     auto& member_of(Class& obj)
     {
         using reft  = Reflection<std::remove_cvref_t<Class>>;
@@ -635,7 +635,7 @@ namespace EasyLib {
         using type  = typename TypeOf<I, types>::type;
         return *reinterpret_cast<type*>(reinterpret_cast<char*>(&obj) + std::get<I>(reft::field_offsets));
     }
-    template<typename Class, size_t I>
+    template<typename Class, std::size_t I>
     auto& member_of(const Class& obj)
     {
         using reft  = Reflection<std::remove_cvref_t<Class>>;
@@ -653,8 +653,8 @@ void gen_field_offsets_func(std::ostream& os)
         "template<Aggregate T>\n"
         "inline auto field_offsets_()\n"
         "{\n"
-        "constexpr size_t nf = num_fields_<T>();\n"
-        "using array = std::array<size_t, nf>;\n"
+        "constexpr std::size_t nf = num_fields_<T>();\n"
+        "using array = std::array<std::size_t, nf>;\n"
         "if      constexpr (nf == 0)return array{};\n"
         "else if constexpr (nf == 1)return array{ 0 };\n"
     ;
@@ -665,9 +665,9 @@ void gen_field_offsets_func(std::ostream& os)
         for (int j = 2; j <= i; ++j)
             os << ",m" << j;
         os  << "] = *((T*)nullptr);\n"
-            << "    return array{ (size_t)&m1";
+            << "    return array{ (std::size_t)&m1";
         for (int j = 2; j <= i; ++j)
-            os << ", (size_t)&m" << j;
+            os << ", (std::size_t)&m" << j;
         os << "};\n}\n";
     }
     os << "}\n";
@@ -679,7 +679,7 @@ void gen_field_types_func(std::ostream& os)
         "template<Aggregate T>\n"
         "inline auto field_types_()\n"
         "{\n"
-        "constexpr size_t nf = num_fields_<T>();\n"
+        "constexpr std::size_t nf = num_fields_<T>();\n"
         "if      constexpr (nf == 0)return Types<>{};\n"
         "else if constexpr (nf == 1) { auto [m1] = *((T*)nullptr); return Types<decltype(m1)>{}; }\n"
         ;
