@@ -114,11 +114,6 @@ namespace EasyLib {
         inline static constexpr size_t size_bytes = sizeof(T);
     };
 
-    template<size_t ... N> struct Integers
-    {
-        inline static constexpr size_t size = sizeof...(N);
-    };
-
     template<typename ... TS> struct Types
     {
         inline static constexpr size_t size = sizeof...(TS);
@@ -557,23 +552,6 @@ namespace EasyLib {
         using field_types = typename decltype(detail::field_types_<T>());
     };
 
-    //! @brief Get reference of class member variable even if it is private or protect.
-    //! @tparam Class  The class/struct type.
-    //! @tparam I      The member index, >=0
-    //! @param obj     Instance of type.
-    //! @return Reference of the I-th member variable of \obj.
-    template<typename Class, size_t I>
-    auto& member_of(Class& obj)
-    {
-        using reft  = Reflection<Class>;
-        using types = typename reft::field_types;
-        using type  = typename TypeOf<I, types>::type;
-        if constexpr (std::is_const_v<Class>)
-            return *reinterpret_cast<const type*>(reinterpret_cast<const char*>(&obj) + std::get<I>(reft::field_offsets));
-        else
-            return *reinterpret_cast<type*>(reinterpret_cast<char*>(&obj) + std::get<I>(reft::field_offsets));
-    }
-
 #define _DEF_OFFSET(T,m) \
     template<typename auto T::*m>\
     struct _MemberStealer_ ##T##m\
@@ -603,7 +581,7 @@ namespace EasyLib {
     //! auto& member_offsets = Reflection<Foo>::field_offsets; // {0,4}
     //! using member_types   = Reflection<Foo>::field_types;   // Types<int,float>
     //! Foo foo{};
-    //! using type_a1 = TypeOf<1,nember_types>;
+    //! using type_a1 = TypeOf<1, nember_types>;
     //! member_of<Foo,1>(foo) = 2; // ==> foo = {0,2};
     //! #endcode
 #define REFLECTION(T, m1, ...) \
@@ -616,6 +594,55 @@ namespace EasyLib {
         inline static const std::array<size_t, nfield> field_offsets{FOR_EACH_TM(_GET_OFFSET,T,m1,__VA_ARGS__)};\
         using field_types = EasyLib::Popback<EasyLib::Types<FOR_EACH_TM(_GET_TYPE,T,m1,__VA_ARGS__) void>>::type;\
     };
+
+    //! @brief Get member count.
+    //! @tparam Class  The class/struct type.
+    template<typename Class>
+    inline constexpr size_t member_count = Reflection<Class>::nfield;
+
+    //! @brief Get member type list.
+    //! @tparam Class  The class/struct type.
+    template<typename Class, size_t I>
+    using member_types = typename Reflection<Class>::field_types;
+
+    //! @brief Get type of the i-th member.
+    //! @tparam Class  The class/struct type.
+    //! @tparam I      The member index, >=0
+    template<typename Class, size_t I>
+    using member_type = TypeOf<I, typename Reflection<Class>::field_types>::type;
+
+    //! @brief Get member offsets array.
+    //! @tparam Class  The class/struct type.
+    template<typename Class>
+    inline auto& member_offsets() { return Reflection<Class>::field_offsets; }
+
+    //! @brief Get offset in bytes of the i-th member.
+    //! @tparam Class  The class/struct type.
+    //! @tparam I      The member index, >=0
+    template<typename Class, size_t I>
+    inline size_t member_offset() { return std::get<I>(Reflection<Class>::field_offsets); }
+
+    //! @brief Get reference of class member variable even if it is private or protect.
+    //! @tparam Class  The class/struct type.
+    //! @tparam I      The member index, >=0
+    //! @param obj     Instance of type.
+    //! @return Reference of the I-th member variable of \obj.
+    template<typename Class, size_t I>
+    auto& member_of(Class& obj)
+    {
+        using reft  = Reflection<std::remove_cvref_t<Class>>;
+        using types = typename reft::field_types;
+        using type  = typename TypeOf<I, types>::type;
+        return *reinterpret_cast<type*>(reinterpret_cast<char*>(&obj) + std::get<I>(reft::field_offsets));
+    }
+    template<typename Class, size_t I>
+    auto& member_of(const Class& obj)
+    {
+        using reft  = Reflection<std::remove_cvref_t<Class>>;
+        using types = typename reft::field_types;
+        using type  = typename TypeOf<I, types>::type;
+        return *reinterpret_cast<const type*>(reinterpret_cast<const char*>(&obj) + std::get<I>(reft::field_offsets));
+    }
 }
 
 /*
