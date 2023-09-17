@@ -549,7 +549,7 @@ namespace EasyLib {
         inline static constexpr std::size_t size_bytes = sizeof(T);
         inline static constexpr std::size_t nfield = detail::num_fields_<T>();
         inline static const std::array<std::size_t, nfield> field_offsets{ detail::field_offsets_<T>() };
-        using field_types = typename decltype(detail::field_types_<T>());
+        using field_types = decltype(detail::field_types_<T>());
     };
 
 #define _DEF_OFFSET(T,m) \
@@ -564,7 +564,7 @@ namespace EasyLib {
     auto _get_type_ ##T##m(); /*redeclare in global ns*/ 
 
 #define _GET_OFFSET(T,m) _get_offset_ ##T##m(),
-#define _GET_TYPE(T,m)  typename decltype(_get_type_ ##T##m())::type,
+#define _GET_TYPE(T,m)  decltype(_get_type_ ##T##m())::type,
 
     //! @brief used to reflect a non-aggregate type.
     //! @code
