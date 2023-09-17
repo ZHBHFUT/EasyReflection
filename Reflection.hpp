@@ -553,7 +553,7 @@ namespace EasyLib {
     };
 
 #define _DEF_OFFSET(T,m) \
-    template<typename auto T::*m>\
+    template<auto T::*m>\
     struct _MemberStealer_ ##T##m\
     {\
         friend std::size_t _get_offset_ ##T##m(){return (std::size_t)&(((T*)nullptr)->*m);}\
