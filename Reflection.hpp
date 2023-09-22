@@ -554,17 +554,17 @@ namespace EasyLib {
 
 #define _DEF_OFFSET(T,m) \
     template<auto T::*m>\
-    struct _MemberStealer_ ##T##m\
+    struct _MemberStealer_ ##T_##m\
     {\
-        friend std::size_t _get_offset_ ##T##m(){return (std::size_t)&(((T*)nullptr)->*m);}\
-        friend auto _get_type_ ##T##m(){return EasyLib::Type<std::remove_reference_t<decltype(((T*)nullptr)->*m)> >{};}\
+        friend std::size_t _get_offset_ ##T_##m(){return (std::size_t)&(((T*)nullptr)->*m);}\
+        friend auto _get_type_ ##T_##m(){return EasyLib::Type<std::remove_reference_t<decltype(((T*)nullptr)->*m)> >{};}\
     };\
-    template struct _MemberStealer_ ##T##m<&T::m>;\
-    std::size_t _get_offset_ ##T##m(); /*redeclare in global ns*/ \
-    auto _get_type_ ##T##m(); /*redeclare in global ns*/ 
+    template struct _MemberStealer_ ##T_##m<&T::m>;\
+    std::size_t _get_offset_ ##T_##m(); /*redeclare in global ns*/ \
+    auto _get_type_ ##T_##m(); /*redeclare in global ns*/ 
 
-#define _GET_OFFSET(T,m) _get_offset_ ##T##m(),
-#define _GET_TYPE(T,m)  decltype(_get_type_ ##T##m())::type,
+#define _GET_OFFSET(T,m) _get_offset_ ##T_##m(),
+#define _GET_TYPE(T,m)  decltype(_get_type_ ##T_##m())::type,
 
     //! @brief used to reflect a non-aggregate type.
     //! @code

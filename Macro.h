@@ -1,6 +1,8 @@
 #pragma once
 
-/* NOTE: User should use the /Zc:preprocessor compiler switch for MSVC. */
+/* NOTE: User should use the /Zc:preprocessor compiler switch for MSVC.
+*  This will be fixed in future.
+*/
 #if defined(_MSVC_TRADITIONAL) && _MSVC_TRADITIONAL
 #error "/Zc:preprocessor compiler switch must enable!!!"
 #endif
